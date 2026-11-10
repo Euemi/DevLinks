@@ -1,87 +1,195 @@
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* ===== Temas =====
+   Escuro: salão do castelo à luz de tochas
+   Claro:  pergaminho iluminado
+*/
 :root {
-    --text-color: white;
-    --bg-url: url(./assets/bg-mobile.jpg);
-    --stroke-color: rgba(255, 255, 255, 0.5);
-    --surface-color: rgba(255, 255, 255, 0.05);
-    --surface-color-hover: rgba(0, 0, 0, 0.2);
-    --highlight-color: rgba(255, 255, 255, 0.2);
+    --text-color: #f1e3c2;
+    --muted-color: #c8b48a;
+    --bg-color: #140d08;
+    --bg-glow: rgba(255, 150, 50, 0.22);
+    --bg-vignette: rgba(0, 0, 0, 0.75);
+
+    --gold: #c9a24a;
+    --gold-bright: #ecc96a;
+    --gold-dim: rgba(201, 162, 74, 0.45);
+
+    --surface-color: linear-gradient(180deg, #3a2716 0%, #24170d 100%);
+    --surface-color-hover: linear-gradient(180deg, #5a2018 0%, #3a120c 100%);
+    --surface-text: #f1e3c2;
+    --inner-ring: #140d08;
+
+    --shield-color: linear-gradient(180deg, #d9b45a 0%, #8e6a25 100%);
+    --shield-icon: #1f140b;
+
+    --highlight-color: rgba(236, 201, 106, 0.25);
+    --accent-color: #b3362b;
+
+    --switch-track: linear-gradient(180deg, #5b3a22, #3a2414);
+    --switch-knob: #ecc96a;
     --switch-bg-url: url(./assets/moon-stars.svg);
+
+    --grain-opacity: 0.55;
 }
 
 .light {
-    --text-color: black;
-    --bg-url: url(./assets/bg-mobile-light.jpg);
-    --stroke-color: rgba(0, 0, 0, 0.5);
-    --surface-color: rgba(0, 0, 0, 0.05);
-    --surface-color-hover: rgba(0, 0, 0, 0.2);
-    --highlight-color: rgba(0, 0, 0, 0.1);
+    --text-color: #3b2414;
+    --muted-color: #6e4b2a;
+    --bg-color: #efdcb0;
+    --bg-glow: rgba(255, 245, 215, 0.85);
+    --bg-vignette: rgba(120, 72, 28, 0.45);
+
+    --gold: #8e6a25;
+    --gold-bright: #6b4c14;
+    --gold-dim: rgba(110, 75, 42, 0.45);
+
+    --surface-color: linear-gradient(180deg, #f6e7c1 0%, #e6cf9b 100%);
+    --surface-color-hover: linear-gradient(180deg, #8c2a20 0%, #6a1c15 100%);
+    --surface-text: #3b2414;
+    --inner-ring: #f3e2b8;
+
+    --shield-color: linear-gradient(180deg, #9a2c22 0%, #5e1712 100%);
+    --shield-icon: #f6e7c1;
+
+    --highlight-color: rgba(122, 31, 31, 0.15);
+    --accent-color: #8c2a20;
+
+    --switch-track: linear-gradient(180deg, #c9a36a, #a27a43);
+    --switch-knob: #fff6dc;
     --switch-bg-url: url(./assets/sun.svg);
+
+    --grain-opacity: 0.4;
 }
 
+/* ===== Base ===== */
+html {
+    background: var(--bg-color);
+}
 
 body {
-    /*
-    background-image: url(./assets/bg-mobile.jpg);
-    background-repeat: no-repeat;
-    background-position: top center;
-    background-size: cover;
-    */
-
-    background: var(--bg-url) no-repeat top center/cover;
-    height: 100vh;
+    min-height: 100vh;
+    background:
+        radial-gradient(ellipse at 50% 0%, var(--bg-glow) 0%, transparent 60%),
+        radial-gradient(ellipse at center, transparent 45%, var(--bg-vignette) 100%),
+        var(--bg-color);
+    background-attachment: fixed;
+    transition: background-color 0.4s;
 }
-body *{
-    font-family: 'Inter', sans-serif;
+
+/* textura de pergaminho/pedra */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: var(--grain-opacity);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .22 0 0 0 0 .1 0 0 0 .45 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    z-index: 0;
+}
+
+body * {
+    font-family: 'IM Fell English', Georgia, serif;
     color: var(--text-color);
 }
 
-#container{
+#container {
+    position: relative;
+    z-index: 1;
     width: 100%;
     max-width: 588px;
-    margin: 56px auto 0px;
+    margin: 0 auto;
+    padding-top: 40px;
     padding: 0 24px;
 }
 
-/* profile */
+::selection {
+    background: var(--accent-color);
+    color: #f6e7c1;
+}
 
+a:focus-visible,
+#switch:focus-visible {
+    outline: 2px dashed var(--gold-bright);
+    outline-offset: 4px;
+}
+
+/* ===== Perfil ===== */
 #profile {
     text-align: center;
     padding: 24px;
 }
 
-#profile img{
-    width: 112px;
-    
+#profile img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid var(--gold);
+    box-shadow:
+        0 0 0 5px var(--inner-ring),
+        0 0 0 7px var(--gold-dim),
+        0 0 32px var(--bg-glow);
 }
 
 #profile p {
-    font-weight: 500;
-    line-height: 24px;
-    margin-top: 8px;
+    font-family: 'Cinzel Decorative', 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 28px;
+    letter-spacing: 2px;
+    line-height: 1.2;
+    margin-top: 20px;
+    color: var(--gold-bright);
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
 }
 
-/* switch */
+.light #profile p {
+    text-shadow: none;
+}
 
+#profile .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 260px;
+    margin: 10px auto 0;
+    color: var(--gold);
+    font-size: 18px;
+}
+
+#profile .divider::before,
+#profile .divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold));
+}
+
+#profile .divider::after {
+    background: linear-gradient(90deg, var(--gold), transparent);
+}
+
+/* ===== Alternador de tema ===== */
 #switch {
     position: relative;
     width: 64px;
+    height: 32px;
     margin: 4px auto;
-    
+    cursor: pointer;
 }
 
 #switch button {
     width: 32px;
     height: 32px;
-    background: white  var(--switch-bg-url) no-repeat center;
-    border: 0;
+    background: var(--switch-knob) var(--switch-bg-url) no-repeat center;
+    border: 2px solid var(--gold);
     border-radius: 50%;
-    
+    cursor: pointer;
+
     position: absolute;
     top: 50%;
     left: 0;
@@ -92,7 +200,7 @@ body *{
 }
 
 #switch button:hover {
-    outline: 8px solid var(--highlight-color);
+    outline: 6px solid var(--highlight-color);
 }
 
 .light #switch button {
@@ -103,111 +211,166 @@ body *{
     display: block;
     width: 64px;
     height: 24px;
-    background: var(--surface-color);
-    border: var(--stroke-color);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    margin-top: 4px;
+    background: var(--switch-track);
+    border: 1px solid var(--gold);
     border-radius: 9999px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.45);
 }
 
-
-/* links */
-
+/* ===== Links (estandartes) ===== */
 ul {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 16px;
-
-    padding: 24px 0;
+    gap: 18px;
+    padding: 28px 0;
 }
 
-ul li a{
-    border: 1px solid red;
-
+ul li a {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
 
-    padding: 16px 24px;
+    padding: 16px 48px;
     background: var(--surface-color);
-    border: 1px solid var(--stroke-color);
-    border-radius: 8px;
-
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    border: 2px solid var(--gold);
+    border-radius: 2px;
+    box-shadow:
+        inset 0 0 0 4px var(--inner-ring),
+        inset 0 0 0 5px var(--gold-dim),
+        0 4px 12px rgba(0, 0, 0, 0.35);
 
     text-decoration: none;
-    font-weight: 500;
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--surface-text);
 
-    transition: background 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s, color 0.2s;
 }
 
-/* pseudo-selector */
+/* ornamentos nas pontas */
+ul li a::before,
+ul li a::after {
+    content: "❖";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    color: var(--gold);
+    transition: color 0.2s;
+}
+
+ul li a::before { left: 18px; }
+ul li a::after  { right: 18px; }
+
 ul li a:hover {
     background: var(--surface-color-hover);
-    border: 1.5px solid var(--text-color);
-
+    color: #f6e7c1;
+    transform: translateY(-2px);
+    box-shadow:
+        inset 0 0 0 4px var(--inner-ring),
+        inset 0 0 0 5px var(--gold-bright),
+        0 8px 24px rgba(0, 0, 0, 0.45),
+        0 0 18px var(--highlight-color);
 }
 
-/* social links */
+ul li a:hover::before,
+ul li a:hover::after {
+    color: var(--gold-bright);
+}
+
+.light ul li a:hover::before,
+.light ul li a:hover::after {
+    color: #f6e7c1;
+}
+
+/* ===== Redes sociais (escudos) ===== */
 #social-links {
     display: flex;
     justify-content: center;
-
-
-    padding: 24px 0;
-
-    font-size: 24px;
+    gap: 14px;
+    padding: 16px 0 24px;
 }
 
 #social-links a {
     display: flex;
     align-items: center;
-    justify-content: center; 
-    padding: 16px;
+    justify-content: center;
+    width: 48px;
+    height: 56px;
+    padding-bottom: 8px;
 
-    transition: background 0.2s; 
-    border-radius: 50%;
+    background: var(--shield-color);
+    clip-path: polygon(0 0, 100% 0, 100% 58%, 50% 100%, 0 58%);
+    font-size: 22px;
+
+    transition: transform 0.2s, filter 0.2s;
+}
+
+#social-links a ion-icon {
+    color: var(--shield-icon);
 }
 
 #social-links a:hover {
-    background: var(--highlight-color);
-   
-   
+    transform: translateY(-3px);
+    filter: brightness(1.2);
 }
 
+/* ===== Rodapé ===== */
 footer {
-    padding: 24px 0;
+    padding: 24px 0 40px;
     text-align: center;
-    font-size: 14px;
+    font-size: 15px;
+    font-style: italic;
+    color: var(--muted-color);
 }
 
-/* media queries */
-@media (min-width: 700px) {
-    :root {
-        --bg-url: url(./assets/bg-desktop.jpg);
+footer a {
+    color: var(--gold-bright);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--gold);
+}
+
+footer a:hover {
+    color: var(--accent-color);
+}
+
+/* ===== Telas menores ===== */
+@media (max-width: 420px) {
+    ul li a {
+        padding: 14px 40px;
+        font-size: 13px;
+        letter-spacing: 1px;
     }
-    .light {
-        --bg-url: url(./assets/bg-desktop-light.jpg);
+
+    ul li a::before { left: 14px; }
+    ul li a::after  { right: 14px; }
+
+    #profile p {
+        font-size: 24px;
     }
 }
 
-/* animation */
+/* ===== Animações ===== */
 @keyframes slide-in {
-    from {
-        left: 0;
-    }
-    to {
-        left: 50%;
-    }
+    from { left: 0; }
+    to   { left: 50%; }
 }
 
 @keyframes slide-back {
-    from {
-        left: 50%;
-    }
-    to {
-        left: 0;
+    from { left: 50%; }
+    to   { left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
     }
 }
